@@ -60,7 +60,8 @@ exchangeCCXTObjs.append(krakenObj)
 
 
 async def run():
-    async with websockets.connect("ws://cuppong.hessdevelopments.com:11328/mainserver") as websocket:
+    # async with websockets.connect("ws://cuppong.hessdevelopments.com:11328/mainserver") as websocket:
+    async with websockets.connect("ws://ec2-18-216-52-122.us-east-2.compute.amazonaws.com:11328/mainserver") as websocket:
         # try:
         main_counter = 0
         all_times = []
