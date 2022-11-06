@@ -60,7 +60,7 @@ exchangeCCXTObjs.append(krakenObj)
 
 
 async def run():
-    async with websockets.connect("ws://cuppong.hessdevelopments.com:11328/mainserver") as websocket:
+    async with websockets.connect("ws://cuppong.hessdevelopments.com:11328/mainserver", ping_interval=None, ping_timeout=None) as websocket:
     # async with websockets.connect("ws://ec2-18-216-52-122.us-east-2.compute.amazonaws.com:11328/mainserver") as websocket:
     # websocket = await websockets.connect("ws://ec2-18-216-52-122.us-east-2.compute.amazonaws.com:11328/mainserver")
     # try:
