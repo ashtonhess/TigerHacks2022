@@ -17,8 +17,8 @@ from websockets.datastructures import Headers
 
 def parse_path(path: str) -> tuple[str, dict]:
     # Returns the path requested along with a dictionary corresponding to GET parameters
-    # Example:
-    # await parse_path('ws://beacon:8082/abacus?date=2020-12-18') => ('/abacus', {'date': '2020-12-18'})
+    # Ex:
+    # await parse_path('ws://cuppong.hessdevelopments.com:11328/data?date=2011-01-11') => ('/data', {'date': '2011-01-11'})
     parse_result = urllib.parse.urlparse(path)
     requested_path = parse_result.path
     if len(requested_path) > 1 and requested_path[-1] == '/':
@@ -127,6 +127,8 @@ class WebsocketServer:
         websocket_largs = [self.handler, host, port]
         websocket_kwargs = {
             'process_request': self._process_request,
+            'ping_interval': None,
+            'ping_timeout': None,
         }
         self.websocket_server = websockets.serve(*websocket_largs, **websocket_kwargs)
         print(f'Starting server at {host}:{port}')
