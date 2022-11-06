@@ -14,13 +14,14 @@ import websockets
 # print(btc_ticker)
 # print()
 # print(elapsed_time)
-aws_location = 'us-east-1-NVirginia'
+aws_location = '(server location)'
 
 class MainServerMessage:
     def __init__(self, current_time, aws_location):
+        self.aws_location = aws_location
         self.current_time = current_time
         self.exchange_avg_latency = []
-        self.aws_location = aws_location
+
 
 class ExchAvgData:
     def __init__(self, exchange):
@@ -97,7 +98,7 @@ async def run():
             # print(json_string)
             main_counter += 1
             if main_counter != 0 and main_counter % 10 == 0:
-                print("ITERATION: " + str(main_counter))
+                # print("ITERATION: " + str(main_counter))
                 exch_avg_objs = []
                 for exch in exchanges:
                     obj = ExchAvgData(exch)
@@ -115,11 +116,11 @@ async def run():
                     main_server_message_obj = MainServerMessage(time.time(), aws_location)
                 i = 0
                 for exch in exchanges:
-                    print("HERE DSLFKJLDSGNSD")
-                    print(exch_avg_objs[i].sum / 10)
+                    # print("HERE DSLFKJLDSGNSD")
+                    # print(exch_avg_objs[i].sum / 10)
                     main_server_message_obj.exchange_avg_latency.append(exch_avg_objs[i].sum / 10)
-                    print(main_server_message_obj.exchange_avg_latency[i])
-                    print("HERE DSLFKJLDSGNSD")
+                    # print(main_server_message_obj.exchange_avg_latency[i])
+                    # print("HERE DSLFKJLDSGNSD")
                     i+=1
                 # json_string = json.dumps([obj.__dict__ for obj in main_server_message_obj])
                 json_string = json.dumps(main_server_message_obj.__dict__)
