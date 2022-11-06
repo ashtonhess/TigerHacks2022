@@ -1,3 +1,4 @@
+import json
 import time
 import ccxt
 
@@ -11,7 +12,7 @@ import ccxt
 # print(btc_ticker)
 # print()
 # print(elapsed_time)
-
+aws_location = 'us-east-1-NVirginia'
 
 class ExchTime:
     def __init__(self, exchange, latency):
@@ -25,6 +26,7 @@ class ExchangeCCTX:
         self.ccxtObj = ccxtObj
 
         # print(exch.exchangeName + ExchTime)
+
 
 
 allTimes = []
@@ -62,6 +64,7 @@ while True:
         elapsed_time = end_time - start_time
         object = ExchTime(exch.exchange, elapsed_time)
         object.current_time = time.time()
+        object.location = aws_location
         times.append(object)
         print("Exchange: "+object.exchange)
         print("Latency: "+str(object.latency))
@@ -72,6 +75,14 @@ while True:
         print()
         testcounter += 1
 
+    #testJSONstr = json.dumps(times[0].__dict__)
+    #print("HEREHERE")
+    #print(testJSONstr)
+    json_string = json.dumps([ob.__dict__ for ob in times])
+    print("HERE HERE HERE")
+    print(json_string)
+        # jsonstr1 = json.dumps(s1.__dict__)
+        # for obj in times:
 
     # Send times array to main server
     # # If needed, add times to alltimes (memory issues...)
@@ -80,7 +91,4 @@ while True:
     #     "Exchange": "coinbase",
     #     "Latency": "CEO",
     #     "company_name": "Bell System",
-    #     "age": 75,
-    #     "emails": [{"email": "alex@bell.com", "type": "work"}],
-    #     "my_neighbor": False
     # }
