@@ -50,7 +50,7 @@ class ServerMain(WebsocketServer):
                     await asyncio.gather(*send_coroutines, return_exceptions=True)
 
     async def handle_message(self, websocket: websockets.WebSocketServerProtocol, message: str) -> str | dict | None:
-        print(message)
+        # print(message)
         message_data = json.loads(message)
         print(message_data)
         #print(f'NEW MSG:\ttype: {message_data["type"]}\tside:{message_data["side"]}')
