@@ -1,6 +1,6 @@
-# Live Cryptocurrency Exchange Latencies from All AWS Datacenters Dashboard
-
-## TigerHacks2022
+# Live Cryptocurrency Exchange Latencies from All AWS Datacenters Dashboard 
+## Powered by 23 AWS EC2 Instances + Dell Poweredge to create 142 different, real-time graphs.
+### TigerHacks2022
 
 # Purpose
 To provide a live, comprehensive view of the latencies between all possible (23) AWS EC2 instance locations and cryptocurrency exchanges. This provides traders with a clear view of what location(s) are best for trading cryptocurrencies with low latency depending on the exchange they are using.
@@ -9,10 +9,11 @@ To provide a live, comprehensive view of the latencies between all possible (23)
 ### 23 AWS EC2 Instances
 1. EC2 Instances at every possible location are constantly pinging multiple different cryptocurrency exchanges across the world. These latencies are then sent to our main server.
 2. Our main server listens to messages from all 23 instances. This server handles sending the data to the front end.
+3. Each instance is running Ubuntu release 22.04.
 ### Websockets
-3. Websockets are used to communicate between each piece. 
+4. Websockets are used to communicate between each piece. 
 ### Dynamic DNS
-4. Dynamic DNS is used to access our main server. It is currently using an old domain I had registered for another project, cuppong.hessdevelopments.com. Google DNS is used for this and CRON jobs on my router are being used to constantly update this domain so it can always be accessed.
+5. Dynamic DNS is used to access our main server. It is currently using an old domain I had registered for another project, cuppong.hessdevelopments.com. Google DNS is used for this and CRON jobs on my router are being used to constantly update this domain so it can always be accessed.
 
 # Front End
 ### Language and Framework
