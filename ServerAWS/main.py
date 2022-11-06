@@ -60,75 +60,75 @@ exchangeCCXTObjs.append(krakenObj)
 
 
 async def run():
-    # async with websockets.connect("ws://cuppong.hessdevelopments.com:11328/mainserver") as websocket:
+    async with websockets.connect("ws://cuppong.hessdevelopments.com:11328/mainserver", ping_interval=None) as websocket:
     # async with websockets.connect("ws://ec2-18-216-52-122.us-east-2.compute.amazonaws.com:11328/mainserver") as websocket:
-    websocket = await websockets.connect("ws://ec2-18-216-52-122.us-east-2.compute.amazonaws.com:11328/mainserver")
+    # websocket = await websockets.connect("ws://ec2-18-216-52-122.us-east-2.compute.amazonaws.com:11328/mainserver")
     # try:
-    main_counter = 0
-    all_times = []
-    while True:
-        times = []
-        counter = 0
-        for exch in exchangeCCXTObjs:
-            if counter == 0 or counter == 4:
-                start_time = time.perf_counter()
-                response = exch.ccxtObj.fetch_ticker('BTC/USD')
-                end_time = time.perf_counter()
-            else:
-                start_time = time.perf_counter()
-                response = exch.ccxtObj.fetch_ticker('BTC/USDT')
-                end_time = time.perf_counter()
-            counter += 1
-            elapsed_time = end_time - start_time
-            obj = ExchTime(exch.exchange, elapsed_time)
-            obj.current_time = time.time()
-            obj.location = aws_location
-            times.append(obj)
-            # print("Exchange: " + obj.exchange)
-            # print("Latency: " + str(obj.latency))
-            # print("current_time: " + str(obj.current_time))
-            # print(response)
-            # print()
-            # print(times)
-            # print()
-            all_times += times
-        # json_string = json.dumps([ob.__dict__ for ob in times])
-        # print("HERE HERE HERE")
-        # print(json_string)
-        main_counter += 1
-        if main_counter != 0 and main_counter % 10 == 0:
-            print("ITERATION: " + str(main_counter))
-            exch_avg_objs = []
-            for exch in exchanges:
-                obj = ExchAvgData(exch)
-                exch_avg_objs.append(obj)
-            for exch_time_obj in all_times:
-                for i in range(0, 6):
-                    # print("i: "+str(i))
-                    if exch_time_obj.exchange == exchanges[i]:
-                        # print()
-                        # print(exch_time_obj.exchange)
-                        # print(exchanges[i])
-                        # print()
-                        exch_avg_objs[i].sum += exch_time_obj.latency
-                        # print(exch_avg_objs[i].sum)
-                main_server_message_obj = MainServerMessage(time.time(), aws_location)
-            i = 0
-            for exch in exchanges:
-                print("HERE DSLFKJLDSGNSD")
-                print(exch_avg_objs[i].sum / 10)
-                main_server_message_obj.exchange_avg_latency.append(exch_avg_objs[i].sum / 10)
-                print(main_server_message_obj.exchange_avg_latency[i])
-                print("HERE DSLFKJLDSGNSD")
-                i+=1
-            # json_string = json.dumps([obj.__dict__ for obj in main_server_message_obj])
-            json_string = json.dumps(main_server_message_obj.__dict__)
-            await websocket.send(json_string)
-            all_times = []
-        # except websockets.ConnectionClosedError:
-        #     print("EXCEPTION")
-        #     # websocket = websockets.connect("ws://cuppong.hessdevelopments.com:11328/mainserver")
-        #     asyncio.run(run())
+        main_counter = 0
+        all_times = []
+        while True:
+            times = []
+            counter = 0
+            for exch in exchangeCCXTObjs:
+                if counter == 0 or counter == 4:
+                    start_time = time.perf_counter()
+                    response = exch.ccxtObj.fetch_ticker('BTC/USD')
+                    end_time = time.perf_counter()
+                else:
+                    start_time = time.perf_counter()
+                    response = exch.ccxtObj.fetch_ticker('BTC/USDT')
+                    end_time = time.perf_counter()
+                counter += 1
+                elapsed_time = end_time - start_time
+                obj = ExchTime(exch.exchange, elapsed_time)
+                obj.current_time = time.time()
+                obj.location = aws_location
+                times.append(obj)
+                # print("Exchange: " + obj.exchange)
+                # print("Latency: " + str(obj.latency))
+                # print("current_time: " + str(obj.current_time))
+                # print(response)
+                # print()
+                # print(times)
+                # print()
+                all_times += times
+            # json_string = json.dumps([ob.__dict__ for ob in times])
+            # print("HERE HERE HERE")
+            # print(json_string)
+            main_counter += 1
+            if main_counter != 0 and main_counter % 10 == 0:
+                print("ITERATION: " + str(main_counter))
+                exch_avg_objs = []
+                for exch in exchanges:
+                    obj = ExchAvgData(exch)
+                    exch_avg_objs.append(obj)
+                for exch_time_obj in all_times:
+                    for i in range(0, 6):
+                        # print("i: "+str(i))
+                        if exch_time_obj.exchange == exchanges[i]:
+                            # print()
+                            # print(exch_time_obj.exchange)
+                            # print(exchanges[i])
+                            # print()
+                            exch_avg_objs[i].sum += exch_time_obj.latency
+                            # print(exch_avg_objs[i].sum)
+                    main_server_message_obj = MainServerMessage(time.time(), aws_location)
+                i = 0
+                for exch in exchanges:
+                    print("HERE DSLFKJLDSGNSD")
+                    print(exch_avg_objs[i].sum / 10)
+                    main_server_message_obj.exchange_avg_latency.append(exch_avg_objs[i].sum / 10)
+                    print(main_server_message_obj.exchange_avg_latency[i])
+                    print("HERE DSLFKJLDSGNSD")
+                    i+=1
+                # json_string = json.dumps([obj.__dict__ for obj in main_server_message_obj])
+                json_string = json.dumps(main_server_message_obj.__dict__)
+                await websocket.send(json_string)
+                all_times = []
+            # except websockets.ConnectionClosedError:
+            #     print("EXCEPTION")
+            #     # websocket = websockets.connect("ws://cuppong.hessdevelopments.com:11328/mainserver")
+            #     asyncio.run(run())
 
     # class MainServerMessage:
     #     def __init__(self, current_time):
