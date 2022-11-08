@@ -58,6 +58,9 @@ class ServerMain(WebsocketServer):
     def __init__(self):
         super().__init__(HTTPPath)
         self.client_map: dict[str, set[websockets.WebSocketServerProtocol]] = {}
+        self.client_map['all_clients'] = set()
+        self.client_map['web_clients'] = set()
+        self.client_map['aws_servers'] = set()
         self.client_groups = []
         self.data_buffer: dict[str, list] = {}
         self.allData = AllData()
@@ -67,26 +70,38 @@ class ServerMain(WebsocketServer):
     async def on_connect(self, websocket: websockets.WebSocketServerProtocol, path: str):
         if HTTPPath(path) is HTTPPath.SUBSCRIBE:
             await super().on_connect(websocket, path)
-            print('NEW CLIENT CONNECTED')
-            self.client_map['all'] = []
-            self.client_map['all'].append(websocket)
-            self.data_buffer['all'] = []
+            print('A new client has connected.')
+            self.client_map['all_clients'].add(websocket)
+            self.client_map['web_clients'].add(websocket)
+            # self.data_buffer['all'] = []
             # Sending initial message back to connected client.
-            if HTTPPath(path) is HTTPPath.DATA:
-                data = {
-
-                }
-                await websocket.send(json.dumps(data))
-            if HTTPPath(path) is HTTPPath.SUBSCRIBE:
-                data = {
-                    'data':'welcome'
-                }
+            # if HTTPPath(path) is HTTPPath.DATA:
+            #     data = {
+            #
+            #     }
+            #     await websocket.send(json.dumps(data))
+            # if HTTPPath(path) is HTTPPath.SUBSCRIBE:
+            #     data = {
+            #         'data':'welcome'
+            #     }
                 # await websocket.send(json.dumps(data))
-        else:
+        elif HTTPPath(path) is HTTPPath.DATA:
             print("A new AWS server has connected.")
+            self.client_map['all_clients'].add(websocket)
+            self.client_map['aws_servers'].add(websocket)
+        else:
+            print("Unknown client has connected.")
 
     async def on_disconnect(self, websocket: websockets.WebSocketServerProtocol):
-        pass
+        if websocket in self.client_map['web_clients']:
+            self.client_map['web_clients'].remove(websocket)
+            print('A web client was removed.')
+        if websocket in self.client_map['aws_servers']:
+            self.client_map['aws_servers'].remove(websocket)
+            print('An aws server was removed.')
+        self.client_map['all_clients'].remove(websocket)
+
+        # pass
 
     async def _broadcast_task(self):
         # while True:
@@ -116,16 +131,15 @@ class ServerMain(WebsocketServer):
         dataMsgObj = DataMsg(aws_location, current_time, exchange_avg_latency)
         dataToSendObj = DataToSend(aws_location, current_time, exchange_avg_latency)
         json_string = json.dumps(dataToSendObj.__dict__)
-        print("asdknfpiasdnfpoiasndviuasnfpiundf")
-        print(json_string)
-
-        for ws in self.client_map['all']:
-            await ws.send(json_string)
+        # print(json_string)
+        if len(self.client_map['web_clients']) != 0:
+            for ws in self.client_map['web_clients']:
+                await ws.send(json_string)
         # for x in self.client_map['all']:
         #     send_coroutines = [x.send(json.dumps(dataToSendObj.__dict__)) for x in self.client_map['all']]
         #     await asyncio.gather(*send_coroutines, return_exceptions=True)
 
-        self.data_buffer['all'].append(json_string)
+        # self.data_buffer['all'].append(json_string)
 
         # self.data_buffer
 
