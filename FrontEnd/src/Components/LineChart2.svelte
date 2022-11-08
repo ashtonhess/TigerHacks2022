@@ -3,6 +3,7 @@
     import * as Pancake from '@sveltejs/pancake'
 
     export let header = '';
+    export let header2 = '';
 
     export let x1=+Infinity;
     export let x2=-Infinity;
@@ -19,7 +20,7 @@
 
 <div class='chart'>
     <div class='headerdiv'>
-        <h3 class='header'>{header} {current_price.toLocaleString()} seconds</h3>
+        <h3 class='header'>{header} {header2}: {current_price.toLocaleString()} seconds</h3>
         <!-- <h3 class='header'>{header}</h3> -->
         <!-- <h3 class='header2'>${data[data.length-1]}</h3> -->
     </div>
@@ -42,7 +43,7 @@
         <Pancake.Point x={closest.x} y={closest.y}>
             <span class="annotation-point"></span>
             <div class="annotation" style="transform: translate(-{100 * ((closest.x - x1) / (x2 - x1))}%,0)">
-                <strong class='closestY'>${closest.y.toLocaleString()}</strong>
+                <strong class='closestY'>{closest.y.toLocaleString()} seconds</strong>
                 <!-- <span>{closest.x}: {closest.y}</span> -->
                 <span class='closestDate'>{String(new Date(closest.x).toLocaleTimeString())}</span>
             </div>
@@ -61,7 +62,7 @@
         /* left: -3em; */
         /* position: relative; */
         /* display: block; */
-        font-size:xx-large;
+        font-size:smaller;
         font-weight: bolder;
         /* color:rgb(0, 0, 0) */
         color: black;

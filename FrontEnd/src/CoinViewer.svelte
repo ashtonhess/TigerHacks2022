@@ -6,6 +6,8 @@
     // let coin = 'btc';
     // let coin_socket = new WebSocket(`wss://stream.binance.com:9443/ws/${coin}usdt@trade`);
 
+    let master_every_other_toggle = true;
+
     let coins = ['BTC', 'ETH', 'BNB', 'DOGE']
     let coin_socket = new WebSocket(`wss://stream.binance.com:9443/ws/${coins[0].toLocaleLowerCase()}usdt@trade`);
     let coin_socket2 = new WebSocket(`wss://stream.binance.com:9443/ws/${coins[1].toLocaleLowerCase()}usdt@trade`);
@@ -18,7 +20,7 @@
     let coin_y2 = -Infinity;
     let coin_alldata = [];
     let coin_current_price;
-    var coin_every_other_toggle = false;
+    var coin_every_other_toggle = master_every_other_toggle;
     var coin_every_other_tracker = 0;
     var coin_get_nth_msg_to_get = 100;
     coin_socket.onmessage = function (event) {
@@ -66,7 +68,7 @@
     let coin2_alldata = [];
     let coin2_current_price;
 
-    var coin2_every_other_toggle = false;
+    var coin2_every_other_toggle = master_every_other_toggle;
     var coin2_every_other_tracker = 0;
     var coin2_get_nth_msg_to_get = 100;
     coin_socket2.onmessage = function (event) {
@@ -110,7 +112,7 @@
     let coin3_y2 = -Infinity;
     let coin3_alldata = [];
     let coin3_current_price;
-    var coin3_every_other_toggle = false;
+    var coin3_every_other_toggle = master_every_other_toggle;
     var coin3_every_other_tracker = 0;
     var coin3_get_nth_msg_to_get = 100;
     coin_socket3.onmessage = function (event) {
@@ -154,7 +156,7 @@
     let coin4_y2 = -Infinity;
     let coin4_alldata = [];
     let coin4_current_price;
-    var coin4_every_other_toggle = false;
+    var coin4_every_other_toggle = master_every_other_toggle;
     var coin4_every_other_tracker = 0;
     var coin4_get_nth_msg_to_get = 100;
     coin_socket4.onmessage = function (event) {
