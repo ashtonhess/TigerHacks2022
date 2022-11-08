@@ -16,6 +16,7 @@ import websockets
 # print(elapsed_time)
 aws_location = '(server location)'
 
+
 class MainServerMessage:
     def __init__(self, current_time, aws_location):
         self.aws_location = aws_location
@@ -61,10 +62,11 @@ exchangeCCXTObjs.append(krakenObj)
 
 
 async def run():
-    async with websockets.connect("ws://cuppong.hessdevelopments.com:11328/mainserver", ping_interval=None, ping_timeout=None) as websocket:
-    # async with websockets.connect("ws://ec2-18-216-52-122.us-east-2.compute.amazonaws.com:11328/mainserver") as websocket:
-    # websocket = await websockets.connect("ws://ec2-18-216-52-122.us-east-2.compute.amazonaws.com:11328/mainserver")
-    # try:
+    async with websockets.connect("ws://cuppong.hessdevelopments.com:11328/mainserver", ping_interval=None,
+                                  ping_timeout=None) as websocket:
+        # async with websockets.connect("ws://ec2-18-216-52-122.us-east-2.compute.amazonaws.com:11328/mainserver") as websocket:
+        # websocket = await websockets.connect("ws://ec2-18-216-52-122.us-east-2.compute.amazonaws.com:11328/mainserver")
+        # try:
         main_counter = 0
         all_times = []
         while True:
@@ -121,7 +123,7 @@ async def run():
                     main_server_message_obj.exchange_avg_latency.append(exch_avg_objs[i].sum / 10)
                     # print(main_server_message_obj.exchange_avg_latency[i])
                     # print("HERE DSLFKJLDSGNSD")
-                    i+=1
+                    i += 1
                 # json_string = json.dumps([obj.__dict__ for obj in main_server_message_obj])
                 json_string = json.dumps(main_server_message_obj.__dict__)
                 await websocket.send(json_string)
@@ -135,7 +137,6 @@ async def run():
     #     def __init__(self, current_time):
     #         self.current_time = current_time
     #         self.exchange_avg_latency = []
-
 
     # Send times array to main server
     # # If needed, add times to alltimes (memory issues...)
@@ -160,3 +161,6 @@ def start():
             start()
             # websocket = websockets.connect("ws://cuppong.hessdevelopments.com:11328/mainserver")
             # asyncio.run(run())
+
+
+start()
